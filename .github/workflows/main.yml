@@ -20,5 +20,5 @@ jobs:
         uses: ./
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          FROM_BRANCH: "main"
-          TO_BRANCH: "develop"
+          FROM_BRANCH: "main-test"
+          TO_BRANCH: "develop-test"
