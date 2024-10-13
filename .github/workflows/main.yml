@@ -22,3 +22,4 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           FROM_BRANCH: "main-test"
           TO_BRANCH: "develop-test"
+          REVIEWERS: '["sbimochan"]'
