@@ -339,15 +339,22 @@ async function run() {
             : `sync-branches: New code has just landed in ${fromBranch}, so let's bring ${toBranch} up to speed!`,
           draft: pullRequestIsDraft,
         });
+        console.log("🚀 ~ run ~ pullRequest:", pullRequest)
 
         if (reviewers.length > 0 || team_reviewers.length > 0) {
-          octokit.rest.pulls.requestReviewers({
-            owner,
-            repo,
-            pull_number: pullRequest.number,
-            reviewers,
-            team_reviewers,
-          });
+          try {
+            octokit.rest.pulls.requestReviewers({
+              owner,
+              repo,
+              pull_number: pullRequest.number,
+              reviewers,
+              team_reviewers,
+            });
+          } catch (error) {
+            core.info(`Reviews may only be requested from collaborators. One or more of the users or teams you specified is not a collaborator of the ${repo} repository.`)
+            core.info('No reviewers will be requested. Please update the reviewier list to include only collaborators or remove non-collaborators from team.')
+          }
+
         }
 
         if (labels.length > 0) {
@@ -394,7 +401,7 @@ async function run() {
       core.setOutput("PULL_REQUEST_NUMBER", currentPull.number.toString());
     }
   } catch (error) {
-    core.error(error.message);
+    core.setFailed(error.message);
   }
 }
 
